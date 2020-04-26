@@ -230,11 +230,11 @@ EOF
 }
 
 banner
-#initialize
-#config_hostname
-#install_if_not net-tools
-#install_if_not psmisc
-#config_ntp
-#install_java
-#install_zookeeper
-#install_hadoop
+initialize
+config_hostname
+install_if_not net-tools
+install_if_not psmisc
+config_ntp
+install_java
+install_zookeeper
+install_hadoop
