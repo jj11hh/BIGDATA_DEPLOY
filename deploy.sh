@@ -96,6 +96,9 @@ initialize () {
     mkdir -p $WD
     cd $WD
     pwd
+
+    setenforce 0 # Stop SELinux
+    systemctl disable firewalld.service # Stop Firewalld
 }
 
 install_zookeeper () {
@@ -156,11 +159,11 @@ install_hadoop () {
     echo "Setting password for user hadoop"
     cat <<<"hadoop:$HADOOP_PASSWORD" | chpasswd
     
-    ssh-keygen -t rsa
-    cat $HOME/.ssh/id_rsa.pub > $HOME/.ssh/authorized_keys
-    chmod 600 $HOME/.ssh/id_rsa
-    chmod 644 $HOME/.ssh/id_rsa.pub
-    chmod 644 $HOME/.ssh/authorized_keys
+    su hadoop -c "ssh-keygen -t rsa -N "" -f ${HOSTNAME}.rsa"
+    su hadoop -c "cat $HOME/.ssh/${HOSTNAME}.pub > $HOME/.ssh/authorized_keys"
+    su hadoop -c "chmod 600 $HOME/.ssh/${HOSTNAME}"
+
+    # add other pub keys here
 
     cat <<'EOF' > /opt/hadoop/.bash_profile
 ## HADOOP env variables
